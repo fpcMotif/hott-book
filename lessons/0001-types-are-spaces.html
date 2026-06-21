@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lesson 1 — Types are Spaces, Equality is a Path</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script src="../assets/mathjax-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <p class="kicker">HoTT Course · Lesson 1 · ~10 min</p>
+    <h1>Types are Spaces, Equality is a Path</h1>
+    <p class="lede">The one idea the whole subject grows from — and why it forces you to give up something you’ve never questioned about equality.</p>
+  </div>
+
+  <p>You came here to understand <em>foundations</em>: what “types as spaces” really means, and why anyone would rebuild mathematics on it. This first lesson plants the seed. By the end you should be able to read the expression \(p : x =_A y\) out loud, correctly, and explain why it can have <strong>more than one</strong> inhabitant — the single fact that separates this world from the set-theoretic one you already know.</p>
+
+  <div class="callout big-idea">
+    <span class="label">The central idea</span>
+    “The central new idea in homotopy type theory is that types can be regarded as <em>spaces</em> in homotopy theory, or higher-dimensional <em>groupoids</em> in category theory.”<sup class="cite"><a href="#r1">[1, ch.2]</a></sup>
+  </div>
+
+  <h2>The dictionary</h2>
+
+  <p>You already know the right-hand column. The work of this course is to earn the left-hand column — to see that the type-theoretic objects on the left genuinely <em>behave</em> like the homotopical objects on the right. Start by memorizing the correspondence; we will justify each row over the coming lessons.</p>
+
+  <table class="dict">
+    <thead><tr><th>Type theory</th><th>Homotopy theory</th><th>You read it as…</th></tr></thead>
+    <tbody>
+      <tr><td>type \(A\)</td><td>a space</td><td>“the space \(A\)”</td></tr>
+      <tr><td>term \(a : A\)</td><td>a point of \(A\)</td><td>“\(a\) is a point of \(A\)”</td></tr>
+      <tr><td>identity type \(a =_A b\)</td><td>the path space from \(a\) to \(b\)</td><td>“the type of paths from \(a\) to \(b\)”</td></tr>
+      <tr><td>term \(p : a =_A b\)</td><td>a path from \(a\) to \(b\)</td><td>“\(p\) is a path from \(a\) to \(b\)”</td></tr>
+      <tr><td>\(\refl{a} : a =_A a\)</td><td>the constant path at \(a\)</td><td>“\(a\) equals itself, reflexively”</td></tr>
+      <tr><td>\(r : p =_{(a =_A b)} q\)</td><td>a homotopy between paths</td><td>“a path between paths \(p\) and \(q\)”</td></tr>
+    </tbody>
+  </table>
+
+  <p class="marginnote"><strong>Why two equalities?</strong> \(a \jdeq b\) (judgmental) is true by <em>computation</em> — like \(2+2 \jdeq 4\). It is invisible, carries no data, and lives in the meta-theory. \(a =_A b\) (propositional) is a <em>type</em> you can inhabit, transport along, and interrogate. The gap between them is where homotopy lives.</p>
+
+  <h2>Equality becomes a type — and that changes everything</h2>
+
+  <p>In set theory, “\(a = b\)” is a <em>proposition</em>: it is either true or false, full stop. In type theory, equality is given by a <strong>type</strong>, the identity type \(a =_A b\), and its <em>terms are the proofs</em>.<sup class="cite"><a href="#r1">[1, §1.12]</a></sup> There is exactly one canonical way to build such a proof when something is equal to itself — reflexivity, \(\refl{a} : a =_A a\), the constant path.</p>
+
+  <p>Here is the move that breaks set-level intuition. Once equality is a type, nothing forces it to have at most one inhabitant:</p>
+
+  <div class="callout">
+    <span class="label">From the book</span>
+    “Nothing prevents the type \(a = b\) from … including more information. Indeed, this is the cornerstone of the homotopical interpretation, where we regard witnesses of \(a = b\) as <em>paths</em> … <strong>Just as there can be more than one path between two points of a space, there can be more than one witness that two objects are equal.</strong>”<sup class="cite"><a href="#r1">[1, §1.12]</a></sup>
+  </div>
+
+  <p>This is <span class="term">proof-relevance</span>. A proof of equality is <em>data</em>, and two proofs that \(a = b\) need not themselves be equal. For a topologist this should feel familiar and welcome: the loops at a basepoint of the circle are all “paths from \(x\) to \(x\),” but they are genuinely different — they wind different numbers of times. The identity type \(x =_{S^1} x\) will turn out to be \(\mathbb{Z}\). Equality, made into a type, <em>remembers the homotopy</em>.</p>
+
+  <h2>The tower, for free</h2>
+
+  <p>Because \(a =_A b\) is itself a type, you can ask the same question one level up: given two parallel paths \(p, q : a =_A b\), what is \(p =_{(a =_A b)} q\)? That is a type of <em>paths between paths</em> — a homotopy. And then paths between those. Iterating the identity type builds an infinite tower<sup class="cite"><a href="#r1">[1, ch.2]</a></sup>:</p>
+
+  <p style="text-align:center; font-size:1.05rem;">points \(\;\rightsquigarrow\;\) paths \(\;\rightsquigarrow\;\) paths-between-paths \(\;\rightsquigarrow\;\) \(\cdots\)</p>
+
+  <p>This tower, with its composition, inverses, and identity at every level, is exactly the structure of a (weak) <strong>\(\infty\)-groupoid</strong> — the same structure a topological space carries through its points and higher paths. Every type is one, automatically. And the engine that generates the entire structure is a single rule, <em>path induction</em>, which we meet in Lesson 2.</p>
+
+  <p class="note"><strong>Synthetic, not analytic.</strong> Classical homotopy theory is <em>analytic</em>: a path is built out of points, \(p : [0,1] \to X\). HoTT is <em>synthetic</em>: points, paths, and higher paths are primitive, indivisible notions, governed by rules rather than assembled from a substrate.<sup class="cite"><a href="#r1">[1, ch.2]</a></sup> This is the foundational payoff — and the reason the theory can serve as a foundation at all.</p>
+
+  <h2>Check yourself</h2>
+  <p>Answer from memory before revealing — retrieval is what makes this stick.</p>
+
+  <div class="quiz">
+    <p class="q">1. How do you read \(p : x =_A y\) under the homotopy interpretation?</p>
+    <ol class="options">
+      <li data-correct="false">\(p\) is a point of the path from the space</li>
+      <li data-correct="true">\(p\) is a path from point \(x\) to \(y\)</li>
+      <li data-correct="false">\(x\) is a path from the point \(y\) to \(p\)</li>
+      <li data-correct="false">\(A\) is a path from the point \(x\) to \(y\)</li>
+    </ol>
+    <p class="explain" hidden>\(A\) is the space, \(x\) and \(y\) are points of it, and \(p\) — a term of the identity type — is a path from \(x\) to \(y\).</p>
+  </div>
+
+  <div class="quiz">
+    <p class="q">2. What is the deepest break from set-theoretic equality?</p>
+    <ol class="options">
+      <li data-correct="false">Equality of any two terms is always false</li>
+      <li data-correct="false">Equality holds only when terms compute</li>
+      <li data-correct="true">An equality proof is data, possibly many</li>
+      <li data-correct="false">Equality is a proposition that is decidable</li>
+    </ol>
+    <p class="explain" hidden>Proof-relevance: \(a =_A b\) is a type whose inhabitants are proofs, and there may be many <em>distinct</em> ones — “more than one path between two points.” In set theory equality is a mere true/false proposition.</p>
+  </div>
+
+  <div class="quiz">
+    <p class="q">3. Which pair names the two different equalities, in order?</p>
+    <ol class="options">
+      <li data-correct="true">judgmental \(a \jdeq b\); propositional \(a =_A b\)</li>
+      <li data-correct="false">structural \(a \jdeq b\); numerical \(a =_A b\)</li>
+      <li data-correct="false">canonical \(a \jdeq b\); reflexive \(a =_A b\)</li>
+      <li data-correct="false">decidable \(a \jdeq b\); computable \(a =_A b\)</li>
+    </ol>
+    <p class="explain" hidden>\(a \jdeq b\) is judgmental (definitional) equality — true by computation, invisible, no data. \(a =_A b\) is propositional equality — a type whose terms are proofs.</p>
+  </div>
+
+  <div class="quiz">
+    <p class="q">4. Why does every type carry \(\infty\)-groupoid structure?</p>
+    <ol class="options">
+      <li data-correct="false">Because every type is finite and is fully discrete</li>
+      <li data-correct="false">Because each type is, by an axiom, a true group</li>
+      <li data-correct="true">Because identity types iterate into a path tower</li>
+      <li data-correct="false">Because spaces are assumed as a true substrate</li>
+    </ol>
+    <p class="explain" hidden>\(a =_A b\) is itself a type, so you can form identity types of identity types, ad infinitum. That tower of (higher) paths, with composition/inverse/identity at each level, is precisely a weak \(\infty\)-groupoid.</p>
+  </div>
+
+  <h2>Read this next</h2>
+  <p><strong>Primary source.</strong> Read <em>HoTT Book</em> §1.12 “Identity types” and the introduction to Chapter 2 (“Homotopy type theory”). These are the exact passages this lesson is built on — and they are sitting in your repo as <code>preliminaries.tex</code> and <code>basics.tex</code>. Online: <a href="https://homotopytypetheory.org/book/">homotopytypetheory.org/book</a>.<sup class="cite"><a href="#r1">[1]</a></sup> Don’t worry about path induction’s formal rule yet — just absorb the <em>pictures</em>: paths, the constant path, paths between paths.</p>
+
+  <div class="ask-teacher">
+    <strong>I’m your teacher — ask me anything.</strong> Confused why \(\refl{}\) is the <em>only</em> constructor yet there can be many paths? Want to see <em>why</em> \(x =_{S^1} x\) is \(\mathbb{Z}\)? Want this re-explained through category theory instead of topology? Just ask in chat. Follow-up questions are where the real learning happens.
+  </div>
+
+  <div class="lesson-nav">
+    <span><a href="../reference/glossary.html">↗ Glossary</a></span>
+    <span>Next: <a href="0002-path-induction.html"><strong>Lesson 2 — Path induction (J), the one engine ›</strong></a></span>
+  </div>
+
+  <div class="refs">
+    <strong>References</strong>
+    <ol>
+      <li id="r1">The Univalent Foundations Program, <em>Homotopy Type Theory: Univalent Foundations of Mathematics</em>, Institute for Advanced Study, 2013. §1.12 (identity types, reflexivity, path induction); Chapter 2 introduction (types as spaces / \(\infty\)-groupoids; synthetic vs. analytic). Local: <code>preliminaries.tex</code>, <code>basics.tex</code>. Online: <a href="https://homotopytypetheory.org/book/">homotopytypetheory.org/book</a>.</li>
+    </ol>
+  </div>
+
+</div>
+</body>
+</html>
